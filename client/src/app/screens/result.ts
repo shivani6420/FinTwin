@@ -1,9 +1,11 @@
-﻿import { Component, OnDestroy, computed, effect, inject } from '@angular/core';
+﻿import { Component, OnDestroy, WritableSignal, computed, effect, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { TwinAvatar } from '../twin-avatar';
 import { FanChart } from '../fan-chart';
 import { TwinStateService } from '../twin-state.service';
-import { SCENARIOS, ScenarioDef, SimulationService } from '../simulation.service';
+import { BackendService } from '../backend.service';
+import { SCENARIOS, ScenarioDef, SimResult, SimulationService } from '../simulation.service';
 import { money } from '../format';
 
 @Component({
@@ -28,6 +30,7 @@ import { money } from '../format';
       <div class="card">
         <h2 style="font-size:17px">Your next 2 years</h2>
         <app-fan-chart [result]="res()" />
+        <p style="margin:8px 0 0;font-size:12px">Calculated by {{ source() === 'server' ? 'the Django server' : 'your browser' }}</p>
       </div>
       <div class="tl">
         <div><b>{{ risk() }} in 100</b><span>futures run out</span></div>
@@ -42,20 +45,48 @@ import { money } from '../format';
 export class ResultScreen implements OnDestroy {
   state = inject(TwinStateService);
   private sim = inject(SimulationService);
+  private backend = inject(BackendService);
   money = money;
   dots = Array.from({ length: 100 });
   def: ScenarioDef;
   value: number;
 
-  res = computed(() => this.sim.run(this.state.profile(), this.state.fix(), this.def.key, this.value));
+  res: WritableSignal<SimResult>;
+  source = signal<'server' | 'browser'>('browser');
   verdict = computed(() => this.sim.verdict(this.res()));
   risk = computed(() => Math.round(this.res().risk));
+
+  private sub?: Subscription;
+  private timer?: ReturnType<typeof setTimeout>;
 
   constructor() {
     this.def = SCENARIOS.find(s => s.key === this.state.scenario()) ?? SCENARIOS[0];
     this.value = this.state.values()[this.def.key];
+    this.res = signal(this.sim.run(this.state.profile(), this.state.fix(), this.def.key, this.value));
     this.state.addHistory({ key: this.def.key, value: this.value, risk: this.risk(), ts: Date.now() });
+
+    effect(() => {
+      const profile = this.state.profile();
+      const fix = this.state.fix();
+      // 1) instant answer from the browser, so the screen never waits
+      this.res.set(this.sim.run(profile, fix, this.def.key, this.value));
+      this.source.set('browser');
+      // 2) then ask Django, and use its answer if it replies
+      this.sub?.unsubscribe();
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.sub = this.backend.run(profile, fix, this.def.key, this.value).subscribe({
+          next: r => { this.res.set(r); this.source.set('server'); },
+          error: () => this.source.set('browser'),
+        });
+      }, 150);
+    });
     effect(() => this.state.riskNow.set(this.risk()));
   }
-  ngOnDestroy(): void { this.state.sheetOpen.set(false); }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+    clearTimeout(this.timer);
+    this.state.sheetOpen.set(false);
+  }
 }
