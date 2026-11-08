@@ -172,29 +172,33 @@ fintwin/
 
 ## 🚀 Getting started
 
-> The scaffold is still being set up, so these steps are the intended workflow and will be updated as each part lands.
+> You need Node.js 18+, Python 3.10+ and the Angular CLI (`npm i -g @angular/cli`). Open three terminals.
 
+**Terminal 1: Django (the maths)**
 ```bash
-git clone https://github.com/<your-username>/fintwin.git
-cd fintwin
-
-# Backend
-cd backend
-python -m venv venv && source venv/bin/activate
-pip install django djangorestframework numpy
-python manage.py runserver        # http://localhost:8000
-
-# Node relay (new terminal)
-cd node-server
-npm install
-npm start                         # http://localhost:4000
-
-# Frontend (new terminal)
-cd client
-npm install
-ng serve                          # http://localhost:4200
+git clone https://github.com/shivani6420/FinTwin.git
+cd FinTwin/backend
+python -m venv venv
+venv\Scripts\activate        # Mac/Linux: source venv/bin/activate
+pip install -r requirements.txt
+python manage.py runserver   # http://127.0.0.1:8000
 ```
 
+**Terminal 2: Node.js relay**
+```bash
+cd node-server
+npm install
+npm start                    # http://localhost:4000
+```
+
+**Terminal 3: Angular app**
+```bash
+cd client
+npm install
+ng serve                     # http://localhost:4200
+```
+
+Open http://localhost:4200. On the result screen, the small line under the chart tells you which layer did the calculation. If Node or Django is switched off, the app still works by calculating in the browser.
 ---
 
 ## 🤝 Contributing
