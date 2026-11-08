@@ -143,14 +143,14 @@ Results are emitted only to the **requesting client**, not broadcast to everyone
 > **Current progress: core simulation logic implemented; full-stack integration in progress.**
 
 - [x] Monte Carlo simulation logic (standalone Python/NumPy)
-- [ ] Django REST endpoint for simulation
+- [x] Django REST endpoint for simulation
 - [ ] Django models (user profile, simulation runs)
-- [ ] Node.js Socket.IO server
-- [ ] Node ↔ Django integration (Axios)
-- [ ] Angular profile form
-- [ ] Angular scenario picker
-- [ ] D3.js fan chart component
-- [ ] Results view (survival time, risk probability)
+- [x] Node.js Socket.IO server
+- [x] Node ↔ Django integration (Axios)
+- [x] Angular profile form
+- [x] Angular scenario picker
+- [x] Fan chart component (drawn with SVG for now)
+- [x] Results view (survival time, risk probability)
 - [ ] Authentication
 
 ---
