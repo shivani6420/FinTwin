@@ -30,7 +30,7 @@ import { money } from '../format';
       <div class="card">
         <h2 style="font-size:17px">Your next 2 years</h2>
         <app-fan-chart [result]="res()" />
-        <p style="margin:8px 0 0;font-size:12px">Calculated by {{ source() === 'server' ? 'the Django server' : 'your browser' }}</p>
+        <p style="margin:8px 0 0;font-size:12px">Calculated by {{ source() === 'server' ? 'Django, through the Node relay' : 'your browser' }}</p>
       </div>
       <div class="tl">
         <div><b>{{ risk() }} in 100</b><span>futures run out</span></div>
@@ -90,3 +90,4 @@ export class ResultScreen implements OnDestroy {
     this.state.sheetOpen.set(false);
   }
 }
+
