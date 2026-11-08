@@ -11,7 +11,6 @@ A digital twin of your personal finances that simulates job loss, medical bills,
 ![Node.js](https://img.shields.io/badge/Node.js-Socket.IO-339933?logo=nodedotjs&logoColor=white)
 ![Django](https://img.shields.io/badge/Django-REST-092E20?logo=django&logoColor=white)
 ![NumPy](https://img.shields.io/badge/NumPy-Monte%20Carlo-013243?logo=numpy&logoColor=white)
-![D3.js](https://img.shields.io/badge/D3.js-fan%20chart-F9A03C?logo=d3dotjs&logoColor=white)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 </div>
@@ -91,7 +90,7 @@ def monte_carlo(income, expenses, savings, shock_months=6, n_sims=500, months=24
 
 ```mermaid
 flowchart LR
-    A[Angular<br/>dashboard + D3 fan chart] -- Socket.IO event --> B[Node.js<br/>real-time relay]
+    A[Angular<br/>dashboard + SVG fan chart] -- Socket.IO event --> B[Node.js<br/>real-time relay]
     B -- REST / HTTP --> C[Django REST API]
     C --> D[NumPy<br/>Monte Carlo engine]
     D --> C
@@ -129,7 +128,7 @@ Results are emitted only to the **requesting client**, not broadcast to everyone
 
 | Area | Tools |
 |---|---|
-| Frontend | Angular, Angular Material, D3.js, socket.io-client |
+| Frontend | Angular, socket.io-client, custom SVG fan chart |
 | Real-time layer | Node.js, Express, Socket.IO, Axios, CORS, dotenv |
 | Backend | Django, Django REST Framework |
 | Simulation | Python, NumPy (Pandas optional for summaries) |
@@ -159,7 +158,7 @@ Results are emitted only to the **requesting client**, not broadcast to everyone
 
 ```
 fintwin/
-├── client/          # Angular app (forms, scenario picker, D3 fan chart)
+├── client/          # Angular app (forms, scenario picker, SVG fan chart)
 ├── node-server/     # Express + Socket.IO relay
 │   ├── server.js
 │   ├── socketHandlers.js
@@ -212,7 +211,7 @@ This is a team project that is open to ideas. To keep things smooth:
 
 | Area | Owner |
 |---|---|
-| Angular + D3 fan chart | _TBD_ |
+| Angular + SVG fan chart | _TBD_ |
 | Node.js + Socket.IO | _TBD_ |
 | Django + simulation engine | _TBD_ |
 

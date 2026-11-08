@@ -32,7 +32,7 @@ Keep them short and clear, in the present tense:
 
 | Folder | What it is |
 |---|---|
-| `client/` | Angular app (forms, scenario picker, D3 fan chart) |
+| `client/` | Angular app (forms, scenario picker, SVG fan chart) |
 | `node-server/` | Express + Socket.IO real-time relay |
 | `backend/` | Django REST API and the Monte Carlo engine |
 | `docs/` | Diagrams, screenshots, report |
