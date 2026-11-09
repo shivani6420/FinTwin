@@ -52,7 +52,7 @@ export class BackendService {
 
   runs(): Observable<HistoryItem[]> { return this.http.get<HistoryItem[]>(this.api + '/runs/', { headers: this.headers() }); }
   clearRuns(): Observable<unknown> { return this.http.delete(this.api + '/runs/', { headers: this.headers() }); }
-  private headers() { const t = this.auth.token(); return t ? { Authorization: 'Token ' + t } : {}; }
+  private headers(): Record<string, string> { const t = this.auth.token(); return t ? { Authorization: 'Token ' + t } : {}; }
 
   private convert(r: ServerResult): SimResult {
     const W = r.months + 1;
@@ -74,5 +74,6 @@ export class BackendService {
     };
   }
 }
+
 
 
