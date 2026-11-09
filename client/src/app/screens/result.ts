@@ -57,6 +57,7 @@ export class ResultScreen implements OnDestroy {
   risk = computed(() => Math.round(this.res().risk));
 
   private sub?: Subscription;
+  private firstRun = true;
   private timer?: ReturnType<typeof setTimeout>;
 
   constructor() {
@@ -75,7 +76,8 @@ export class ResultScreen implements OnDestroy {
       this.sub?.unsubscribe();
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.sub = this.backend.run(profile, fix, this.def.key, this.value).subscribe({
+        const save = this.firstRun; this.firstRun = false;
+        this.sub = this.backend.run(profile, fix, this.def.key, this.value, save).subscribe({
           next: r => { this.res.set(r); this.source.set('server'); },
           error: () => this.source.set('browser'),
         });
@@ -90,4 +92,5 @@ export class ResultScreen implements OnDestroy {
     this.state.sheetOpen.set(false);
   }
 }
+
 

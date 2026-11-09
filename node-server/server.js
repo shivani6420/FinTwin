@@ -22,7 +22,9 @@ io.on("connection", (socket) => {
     console.log("run_simulation:", payload && payload.scenario);
     socket.emit("simulation_progress", { percent: 10 });
     try {
-      const response = await axios.post(DJANGO_URL, payload, { timeout: 10000 });
+      const { token, ...body } = payload || {};
+      const headers = token ? { Authorization: 'Token ' + token } : {};
+      const response = await axios.post(DJANGO_URL, body, { timeout: 10000, headers });
       socket.emit("simulation_result", { ...response.data, requestId: payload.requestId });
     } catch (err) {
       const message = err.response?.data?.error || err.message;
@@ -35,4 +37,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () => console.log(`Node relay listening on http://localhost:${PORT}`));
+
 

@@ -1,8 +1,9 @@
-﻿import { Component, inject } from '@angular/core';
+﻿import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { TwinAvatar } from '../twin-avatar';
 import { HistoryItem, TwinStateService } from '../twin-state.service';
+import { BackendService } from '../backend.service';
 import { SCENARIOS, ScenarioDef, ScenarioKey } from '../simulation.service';
 
 @Component({
@@ -11,8 +12,8 @@ import { SCENARIOS, ScenarioDef, ScenarioKey } from '../simulation.service';
   template: `
     <div class="scr">
       <h1>History</h1>
-      <p>Your past stress tests.</p>
-      @for (h of state.history(); track h.ts) {
+      <p>{{ fromServer() ? 'Saved on the server.' : 'Saved in this browser.' }}</p>
+      @for (h of items(); track h.ts) {
         <button class="hist" (click)="open(h)">
           <span [class]="'badge ' + badge(h.risk)">{{ h.risk }}%</span>
           <div>
@@ -33,8 +34,17 @@ import { SCENARIOS, ScenarioDef, ScenarioKey } from '../simulation.service';
 })
 export class HistoryScreen {
   state = inject(TwinStateService);
+  private backend = inject(BackendService);
   private router = inject(Router);
+  items = signal<HistoryItem[]>(this.state.history());
+  fromServer = signal(false);
 
+  constructor() {
+    this.backend.runs().subscribe({
+      next: list => { this.items.set(list); this.fromServer.set(true); },
+      error: () => this.items.set(this.state.history()),
+    });
+  }
   def(key: ScenarioKey): ScenarioDef { return SCENARIOS.find(s => s.key === key) ?? SCENARIOS[0]; }
   badge(risk: number): string { return risk < 10 ? 'ok' : risk < 50 ? 'mid' : 'bad'; }
   open(h: HistoryItem): void {

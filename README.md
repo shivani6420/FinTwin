@@ -143,14 +143,14 @@ Results are emitted only to the **requesting client**, not broadcast to everyone
 
 - [x] Monte Carlo simulation logic (standalone Python/NumPy)
 - [x] Django REST endpoint for simulation
-- [ ] Django models (user profile, simulation runs)
+- [x] Django models (simulation runs, saved per user)
 - [x] Node.js Socket.IO server
 - [x] Node ↔ Django integration (Axios)
 - [x] Angular profile form
 - [x] Angular scenario picker
 - [x] Fan chart component (drawn with SVG for now)
 - [x] Results view (survival time, risk probability)
-- [ ] Authentication
+- [x] Authentication (optional sign-in, or continue as a guest)
 
 ---
 

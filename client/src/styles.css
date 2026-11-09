@@ -45,3 +45,5 @@ svg.ch{width:100%;display:block;touch-action:pan-y}svg text{font-size:10.5px;fil
 @media(prefers-reduced-motion:reduce){.scr,#tabs,#sheet,.pb i{transition:none}.dr,.wob{animation:none;stroke-dashoffset:0}}
 
 app-root{display:block;width:100%;max-width:410px}
+
+.tx{width:100%;padding:12px 14px;border:2px solid var(--ink);border-radius:14px;background:var(--bg);color:var(--ink);font:inherit;margin-top:6px}
