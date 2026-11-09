@@ -12,6 +12,7 @@ def run_simulation(data):
     saved = float(data["saved"])
     cut = float(data.get("cut", 0))
     add = float(data.get("add", 0))
+    keep = max(0.0, float(data.get("keep", 0)))
     key = data["scenario"]
     value = float(data["value"])
     seed = int(data.get("seed", 7))
@@ -28,7 +29,7 @@ def run_simulation(data):
     lump = np.zeros(MONTHS)
 
     if key == "job":
-        income[: int(value)] = 0
+        income[: int(value)] = min(keep, earn)
     elif key == "hike":
         expense = expense * (1 + value / 100)
     elif key == "med":
@@ -61,3 +62,6 @@ def run_simulation(data):
         "sims": SIMS,
         "months": MONTHS,
     }
+
+
+

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { money } from './format';
 
 export type ScenarioKey = 'job' | 'med' | 'hike' | 'crash';
 export type Mood = 'ok' | 'mid' | 'bad';
 
-export interface Profile { earn: number; spend: number; loan: number; saved: number; }
+export interface Profile { earn: number; spend: number; loan: number; saved: number; keep?: number; }
 export interface Fix { cut: number; add: number; }
 
 export interface ScenarioDef {
@@ -63,7 +63,7 @@ export class SimulationService {
       paths[i * W] = b;
       for (let m = 0; m < M; m++) {
         let income = profile.earn, expense = spend;
-        if (key === 'job' && m < value) income = 0;
+        if (key === 'job' && m < value) income = Math.min(profile.keep ?? 0, profile.earn);
         if (key === 'hike') expense *= 1 + value / 100;
         expense *= 1 + 0.1 * normal();
         b += income - expense - profile.loan;
@@ -114,11 +114,13 @@ export class SimulationService {
 
   verdict(res: SimResult): { mood: Mood; headline: string; sub: string } {
     const mood = this.moodForRisk(res.risk), r = Math.round(res.risk);
-    const headline = mood === 'ok' ? 'You’d likely be fine.'
+    const headline = mood === 'ok' ? 'Youâ€™d likely be fine.'
       : mood === 'mid' ? 'It could get tight.'
-      : res.medianFirstNegative !== null ? `You’d run out of money around month ${res.medianFirstNegative}.`
-      : 'You’d probably run out of money.';
+      : res.medianFirstNegative !== null ? `Youâ€™d run out of money around month ${res.medianFirstNegative}.`
+      : 'Youâ€™d probably run out of money.';
     const sub = mood === 'ok' ? `Safe in ${100 - r} of 100 possible futures.` : `${r} of 100 possible futures run out of money.`;
     return { mood, headline, sub };
   }
 }
+
+
