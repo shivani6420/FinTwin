@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { money } from './format';
 
 export type ScenarioKey = 'job' | 'med' | 'hike' | 'crash';
@@ -114,10 +114,10 @@ export class SimulationService {
 
   verdict(res: SimResult): { mood: Mood; headline: string; sub: string } {
     const mood = this.moodForRisk(res.risk), r = Math.round(res.risk);
-    const headline = mood === 'ok' ? 'Youâ€™d likely be fine.'
+    const headline = mood === 'ok' ? 'You’d likely be fine.'
       : mood === 'mid' ? 'It could get tight.'
-      : res.medianFirstNegative !== null ? `Youâ€™d run out of money around month ${res.medianFirstNegative}.`
-      : 'Youâ€™d probably run out of money.';
+      : res.medianFirstNegative !== null ? `You’d run out of money around month ${res.medianFirstNegative}.`
+      : 'You’d probably run out of money.';
     const sub = mood === 'ok' ? `Safe in ${100 - r} of 100 possible futures.` : `${r} of 100 possible futures run out of money.`;
     return { mood, headline, sub };
   }
