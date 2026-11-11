@@ -181,6 +181,7 @@ cd FinTwin/backend
 python -m venv venv
 venv\Scripts\activate        # Mac/Linux: source venv/bin/activate
 pip install -r requirements.txt
+python manage.py migrate        # creates the database
 python manage.py runserver   # http://127.0.0.1:8000
 ```
 
